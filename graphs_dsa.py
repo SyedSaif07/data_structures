@@ -383,11 +383,11 @@ g2 = GraphAdjList(5, True)
 
 # g2.detect_cycle()
 
-g2.addWeightedEdge(0, 1, 5)
-g2.addWeightedEdge(0, 3, 10)
-g2.addWeightedEdge(1, 2, 11)
-g2.addWeightedEdge(1, 4, 4)
-g2.addWeightedEdge(2, 4, 9)
-g2.addWeightedEdge(3, 2, 2)
-
-print(g2.djikstra(0))
+# g2.addWeightedEdge(0, 1, 5)
+# g2.addWeightedEdge(0, 3, 10)
+# g2.addWeightedEdge(1, 2, 11)
+# g2.addWeightedEdge(1, 4, 4)
+# g2.addWeightedEdge(2, 4, 9)
+# g2.addWeightedEdge(3, 2, 2)
+#
+# print(g2.djikstra(0))
