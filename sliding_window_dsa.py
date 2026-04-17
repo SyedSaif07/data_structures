@@ -14,6 +14,9 @@ valid condition. Shrink the window by moving the 1st pointer when valid conditio
 met.
 """
 
+from collections import deque
+from typing import List
+
 
 class LongestSubstringLength:
     def addTodict(self, ht, ch):
@@ -86,4 +89,39 @@ class LongestSubstringLength:
         return max_length
 
 
-print(LongestSubstringLength().lengthOfLongestSubstring2("abcabcbb"))
+# print(LongestSubstringLength().lengthOfLongestSubstring2("abcabcbb"))
+
+class SlidingWindowMaximum:
+    """
+    An element becomes useless when
+
+        It is not a part of the current window.
+        For a window size of k, the last element of that window is at j, then the start element of the
+        window is at j-k + 1. Pop from the left.
+
+        If a high value element is found on the right side of it. Pop from the right.
+    """
+
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        ans = []
+        de = deque()
+        n = len(nums)
+        de.append(0)
+        for i in range(1, k):
+            while len(de) > 0 and nums[de[-1]] < nums[i]:
+                de.pop()
+            de.append(i)
+        ans.append(nums[de[0]])
+
+        for j in range(k, n):
+            start_pos = j - k + 1
+            while len(de) > 0 and de[0] < start_pos:
+                de.popleft()
+            while len(de) > 0 and nums[de[-1]] < nums[j]:
+                de.pop()
+            de.append(j)
+            ans.append(nums[de[0]])
+        return ans
+
+
+# print(SlidingWindowMaximum().maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
