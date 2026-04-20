@@ -420,3 +420,84 @@ class AddTwoNumbersLinkedList:
 # l2.next.next.next = ListNode(9)
 #
 # AddTwoNumbersLinkedList().addTwoNumbers(l1, l2)
+
+
+class PalindromeLinkedList:
+    """
+    For a palindrome, if the length is odd, then the first half must mirror the second half
+    after the middle element. We have to skip the middle node.
+
+
+    If it is even then there is no middle element, the first half must mirror the second half.
+
+    Odd: Find reverse point (n//2) + 1 position -> Reverse 2nd half -> Compare with two pointers
+    Even: Find reverse point (n//2) position -> Reverse 2nd half -> Compare with two pointers
+    """
+
+    def isPalindrome(self, head: [ListNode]) -> bool:
+        n = self.findLength(head)
+        if n == 1:
+            return True
+        reversePoint = n // 2
+        if n % 2 == 1:
+            reversePoint += 1
+
+        head2 = self.findPos(head, reversePoint)
+        prev = self.findPos(head, reversePoint - 1)
+
+        self.reverse(head2, prev)
+
+        fp = head
+        sp = prev.next
+
+        while fp is not None and sp is not None:
+            if fp.val != sp.val:
+                return False
+            fp = fp.next
+            sp = sp.next
+        return True
+
+    def findLength(self, node):
+        length = 0
+        curr = node
+        while curr is not None:
+            length += 1
+            curr = curr.next
+        return length
+
+    def findPos(self, node, pos):
+        count = 0
+        curr = node
+        while count < pos:
+            count += 1
+            curr = curr.next
+        return curr
+
+    def reverse(self, head, prev):
+        a = head  # a = 5
+        b = head.next  # b = 4
+        while a is not None and b is not None:
+            c = b.next  # c = 2  c = 1 c=None
+            b.next = a  # b.next = 5 b.next = 4 b.next = 2
+            a = b  # a = 4 a = 2 a = 1
+            b = c  # b = 2 b = 1 b=None
+
+        head.next = None
+        prev.next = a
+
+        # curr = a
+        # while curr is not None:
+        #     print(curr.val)
+        #     curr = curr.next
+
+# l1 = ListNode(1)
+# l1.next = ListNode(2)
+# l1.next.next = ListNode(4)
+# l1.next.next.next = ListNode(5)
+# l1.next.next.next.next = ListNode(3)
+# l1.next.next.next.next.next = ListNode(5)
+# l1.next.next.next.next.next.next = ListNode(4)
+# l1.next.next.next.next.next.next.next = ListNode(2)
+# l1.next.next.next.next.next.next.next.next = ListNode(1)
+#
+# print(PalindromeLinkedList().isPalindrome(l1))

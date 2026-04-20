@@ -19,7 +19,7 @@ Steps:
     Repeat this process to get the exact element matching midpoint.
 
 """
-
+from typing import List
 
 def binary_search(arr, target):
     left = 0
@@ -36,3 +36,63 @@ def binary_search(arr, target):
 
 
 # print(binary_search([1, 5, 7, 10, 15, 78, 99], 5))
+
+
+class FirstAndLastPositionOfElementInSortedArray:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        left = self.findLeft(nums, target)
+        right = self.findRight(nums, target)
+        return [left, right]
+
+    def findLeft(self, nums, target):
+        start = 0
+        end = len(nums) - 1
+        ans = -1
+        while start <= end:
+            mid = (start + end) // 2
+            if target < nums[mid]:
+                end = mid - 1
+            elif target > nums[mid]:
+                start = mid + 1
+            else:
+                ans = mid
+                end = mid - 1
+        return ans
+
+    def findRight(self, nums, target):
+        start = 0
+        end = len(nums) - 1
+        ans = -1
+        while start <= end:
+            mid = (start + end) // 2
+            if target < nums[mid]:
+                end = mid - 1
+            elif target > nums[mid]:
+                start = mid + 1
+            else:
+                ans = mid
+                start = mid + 1
+        return ans
+
+
+# print(FirstAndLastPositionOfElementInSortedArray().searchRange([5, 7, 7, 8, 8, 10], 8))
+
+
+class FindMinimumInRotateSortedArray:
+    def findMin(self, nums: List[int]) -> int:
+        n = len(nums)
+        start = 0
+        end = n - 1
+        ans = nums[0]
+
+        while start <= end:
+            mid = (start + end) // 2
+            if nums[mid] <= nums[-1]:
+                ans = nums[mid]
+                end = mid - 1
+            else:
+                start = mid + 1
+        return ans
+
+
+print(FindMinimumInRotateSortedArray().findMin([3,4,5,1,2]))
