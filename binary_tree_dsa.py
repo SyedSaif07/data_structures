@@ -131,3 +131,65 @@ class SymmetricTree:
             return False
         else:
             return f1.val == f2.val and self.isSym(f1.left, f2.right) and self.isSym(f1.right, f2.left)
+
+
+class SubtreeOfAnotherTree:
+    def isSubtree(self, root, subRoot) -> bool:
+        if root is None:
+            return False
+        if self.isSameTree(root, subRoot):
+            return True
+        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
+    def isSameTree(self, node1, node2):
+        if node1 is None and node2 is None:
+            return True
+        if node1 is None or node2 is None:
+            return False
+        elif node1.val != node2.val:
+            return False
+        return self.isSameTree(node1.left, node2.left) and self.isSameTree(node1.right, node2.right)
+
+
+class MaximumDepthOfBinaryTree:
+    """
+    The depth of a binary tree is the number of nodes in a branch.
+
+    Maximum depth of a binary tree is the maximum number of nodes present in a branch.
+
+    Maximum depth of the tree from root = max(depth of left subtree + 1, depth of right subtree + 1)
+
+    depth of f(node) = max(f(node.left) + 1, f(node.right) + 1)
+
+    f(null) = 0
+    """
+
+    def maxDepth(self, root) -> int:
+        if root is None:
+            return 0
+        else:
+            return max(self.maxDepth(root.left) + 1, self.maxDepth(root.right) + 1)
+
+
+class BalancedBinaryTree:
+    """
+    Height balanced when the difference of the heights of left and right children
+    must be less than or equal to 1
+    """
+
+    def isBalanced(self, root) -> bool:
+        rootHeight = self.height(root)
+        if rootHeight != -1:
+            return True
+        else:
+            return False
+
+    def height(self, node):
+        if node is None:
+            return 0
+        else:
+            leftHeight = self.height(node.left)
+            rightHeight = self.height(node.right)
+            if leftHeight == -1 or rightHeight == -1 or abs(leftHeight - rightHeight) > 1:
+                return -1
+            return max(leftHeight, rightHeight) + 1
