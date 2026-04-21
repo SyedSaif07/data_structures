@@ -50,3 +50,21 @@ class TrappingRainWater:
 
 
 # print(TrappingRainWater().trap(height=[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
+
+
+class RemoveDuplicatesFromSortedArray:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        res = 1
+        for i in range(1, len(nums)):
+            if nums[i] != nums[i - 1]:
+                nums[res] = nums[i]
+                res += 1
+        return res
+
+
+# nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
+# k = RemoveDuplicatesFromSortedArray().removeDuplicates(nums)
+# print(nums)
+# print(nums[:k])

@@ -1,3 +1,5 @@
+from typing import List
+
 li = [(i, j) for i in range(5) for j in range(4)]
 # print(li)
 
@@ -176,4 +178,26 @@ board = [["8", "3", ".", ".", "7", ".", ".", ".", "."]
     , [".", ".", ".", "4", "1", "9", ".", ".", "5"]
     , [".", ".", ".", ".", "8", ".", ".", "7", "9"]]
 
+
 # print(valid_sudoku(board))
+
+
+class MajorityElement:
+    """
+    Boye moore voting algorithm
+    """
+
+    def majorityElement(self, nums: List[int]) -> int:
+        candidate = 0
+        count = 0
+        for num in nums:
+            if count == 0:
+                candidate = num
+            if num == candidate:
+                count += 1
+            else:
+                count -= 1
+        return candidate
+
+
+print(MajorityElement().majorityElement([3, 3, 4]))

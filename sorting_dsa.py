@@ -1,3 +1,4 @@
+from typing import List
 def bubble_sort(l):
     """
     Compare each element with its next neighbour and shift elements accordingly.
@@ -76,7 +77,7 @@ def insertion_sort(l):
     return l
 
 
-print(insertion_sort(l=[10, 20, 50, 40, 15, 25])) 
+# print(insertion_sort(l=[10, 20, 50, 40, 15, 25]))
 
 
 def merge_sorted_arrays(a, b):
@@ -183,6 +184,33 @@ def mergeSort(myList):
             j += 1
             k += 1
 
+
 # myList = [54, 26, 93, 17]
 # mergeSort(myList)
 # print(myList)
+
+class MergeSortedArrays:
+    """
+    To solve this we start filling from the end with the largest number.
+    """
+
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        i = m - 1
+        j = n - 1
+        k = m + n - 1
+
+        while j >= 0:
+            if i >= 0 and nums1[i] > nums2[j]:
+                nums1[k] = nums1[i]
+                i -= 1
+            else:
+                nums1[k] = nums2[j]
+                j -= 1
+            k -= 1
+        return nums1
+
+
+print(MergeSortedArrays().merge([1, 2, 3, 0, 0, 0], 3, [2, 5, 6], 3))
