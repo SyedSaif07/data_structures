@@ -501,3 +501,39 @@ class PalindromeLinkedList:
 # l1.next.next.next.next.next.next.next.next = ListNode(1)
 #
 # print(PalindromeLinkedList().isPalindrome(l1))
+
+
+class LinkedListCycleII:
+    """
+    Fast and slow pointer theorem to find the intersection point.
+
+    Once we found the intersection point, move the starting node and intersection node together.
+    They will meet at the start of the cycle.
+    """
+
+    def detectCycle(self, head):
+        slow = head
+        fast = head
+
+        while True:
+            if fast is None or fast.next is None:
+                return None
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                insPoint = slow
+                break
+        start = head
+        while start != insPoint:
+            start = start.next
+            insPoint = insPoint.next
+        return start
+
+
+l1 = ListNode(3)
+l1.next = ListNode(2)
+l1.next.next = ListNode(0)
+l1.next.next.next = ListNode(-4)
+l1.next.next.next.next = l1.next
+
+# print(LinkedListCycleII().detectCycle(l1))

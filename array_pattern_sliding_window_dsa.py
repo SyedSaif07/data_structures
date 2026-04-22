@@ -126,36 +126,3 @@ class SlidingWindowMaximum:
 
 # print(SlidingWindowMaximum().maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
 
-
-class MoveZeroes:
-    def moveZeroes(self, nums: List[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
-        # n = len(nums)
-        # fp = 0
-        # sp = 1
-        # while n > sp > fp:
-        #     if nums[sp] != 0:
-        #         if nums[fp] == 0:
-        #             nums[fp], nums[sp] = nums[sp], nums[fp]
-        #             fp += 1
-        #             sp += 1
-        #         else:
-        #             fp += 1
-        #             sp = fp + 1
-        #     else:
-        #         sp += 1
-        # return nums
-
-        non_zero = 0  # Pointer for non-zero elements
-
-        # Move all non-zero elements to the front
-        for i in range(len(nums)):
-            if nums[i] != 0:
-                nums[i], nums[non_zero] = nums[non_zero], nums[i]
-                non_zero += 1
-        return nums
-
-
-print(MoveZeroes().moveZeroes([4, 2, 4, 0, 0, 3, 0, 5, 1, 0]))

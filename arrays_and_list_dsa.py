@@ -182,22 +182,17 @@ board = [["8", "3", ".", ".", "7", ".", ".", ".", "."]
 # print(valid_sudoku(board))
 
 
-class MajorityElement:
-    """
-    Boye moore voting algorithm
-    """
+class FindAllNumbers:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(len(nums)):
+            idx = abs(nums[i]) - 1
+            if nums[idx] > 0:
+                nums[idx] *= -1
+        res = []
 
-    def majorityElement(self, nums: List[int]) -> int:
-        candidate = 0
-        count = 0
-        for num in nums:
-            if count == 0:
-                candidate = num
-            if num == candidate:
-                count += 1
-            else:
-                count -= 1
-        return candidate
+        for i in range(len(nums)):
+            if nums[i] > 0:
+                res.append(i + 1)
+        return res
 
-
-print(MajorityElement().majorityElement([3, 3, 4]))
+# print(FindAllNumbers().findDisappearedNumbers([4, 3, 2, 7, 8, 2, 3, 1]))
