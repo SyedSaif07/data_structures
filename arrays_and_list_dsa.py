@@ -1,3 +1,4 @@
+from itertools import accumulate
 from typing import List
 
 li = [(i, j) for i in range(5) for j in range(4)]
@@ -195,4 +196,58 @@ class FindAllNumbers:
                 res.append(i + 1)
         return res
 
+
 # print(FindAllNumbers().findDisappearedNumbers([4, 3, 2, 7, 8, 2, 3, 1]))
+
+
+class IntersectionOfTwoArrays:
+    def intersection1(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        nums1 = set(nums1)
+        ans = set()
+        for i in nums2:
+            if i in nums1:
+                ans.add(i)
+        return list(ans)
+
+    def intersection2(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        return list(set(nums1).intersection(set(nums2)))
+
+
+# print(IntersectionOfTwoArrays().intersection1([1,2,2,1], [2,2]))
+
+
+class MaxPopulationYear:
+    def maximumPopulation(self, logs: List[List[int]]) -> int:
+        arr = [0] * 2051
+
+        for birth, death in logs:
+            arr[birth] += 1
+            arr[death] -= 1
+
+        arr = list(accumulate(arr))
+
+        ans_count, ans_year = 0, 0
+        for year, count in enumerate(arr):
+            if count > ans_count:
+                ans_count = count
+                ans_year = year
+        return ans_year
+
+
+# print(MaxPopulationYear().maximumPopulation(
+#     [[2025, 2041], [1988, 2007], [2003, 2046], [2045, 2049], [2025, 2027], [2014, 2040], [2014, 2027], [2011, 2027],
+#      [1972, 2019]]))
+
+
+class RemoveElement:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        index = 0
+        for i in range(len(nums)):
+            if nums[i] != val:
+                nums[index] = nums[i]
+                index += 1
+        return index
+
+
+# nums = [3, 2, 2, 3]
+# print(RemoveElement().removeElement(nums, 3))

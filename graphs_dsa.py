@@ -239,11 +239,96 @@ Single Source Shortest Path:
                         In the next iteration we pop (6,D) but we found optimal distances so we will
                         ignore this. And pop (11,E) but E doesnt have nodes to reach to. Now my algorithm will
                         stop.
+                        
+                        With negative edge weights, we cannot find the shortest path with this
+                        algorithm, as more edges we traverse more loops we do the lesser total
+                        distance becomes. So this algorithm is not suitable in case of negative
+                        edge weights.
                             
     Bellman Ford Algorithm: DP based algorithm. 
-                            Applicable even for negative edge weights.
+                            Applicable even for negative edge weights. It is able to detect.
+                            Edges: 
+                            3 -> 4 (6) 
+                            1 -> 2 (0)
+                            1 -> 3 (3)
+                            2 -> 3 (4)
+                            0 -> 2 (2)
+                            0 -> 1 (1)
+                            
+                            Initially {0:0, 1:∞, 2:∞, 3:∞, 4:∞}
+                            Relaxing edge is done by - u -> v (w)
+                            d[v] = d[u] + w
+                            if d[u] + w < d[v]:
+                                d[v] = d[u] + w
+                            
+                            0 -> 2 d[2] = 0 + 2 = 2 < ∞
+                            {0:0, 1:∞, 2:2, 3:∞, 4:∞}
+                            
+                            0 -> 1 d[1] = 0 + 1 = 1 < ∞
+                            {0:0, 1:1, 2:2, 3:∞, 4:∞}
+                            
+                            We have to repeat this process number of vertices - 1 times. For 5 vertices,
+                            we have to repeat these steps 4 times.
+                            
+                            1 -> 2(0) d[2] = d[1] + w = 1 + 0 = 1 < 2
+                            {0:0, 1:1, 2:1, 3:∞, 4:∞}
+                            
+                            1 -> 3 (3) d[3] = d[1] i.e 1 + 3 = 4 < ∞
+                            {0:0, 1:1, 2:1, 3:4, 4:∞}
+                            
+                            3 -> 4 (6) d[4] = d[3] i.e. 4 + 6 = 10 < ∞
+                            {0:0, 1:1, 2:1, 3:4, 4:10}
+                            
+                            Any shortest path in the graph will have maximum v-1 edges.
     
-
+Minimum Spanning Tree:
+    A Minimum Spanning Tree (MST) of a connected, undirected, weighted graph is a subgraph that connects all vertices 
+    together with the minimum possible total edge weight and without any cycles. 
+    
+    A tree is a subset of graph. A spanning tree is a subgraph. A spanning tree spans across
+    the nodes of one connected component.
+    
+    A graph can have many spanning trees. Minimum spanning tree is to find the spanning
+    tree with minimum weight.
+    
+    Prim's Algorithm: A-B-C-D-E Start with any node eg: C, MST = 0 
+                      visited = {A:False, B:False, C:False, D: False, E:False}
+                      
+                      PQ=[(0,C)] 
+                      PQ.pop() i.e (0,C)
+                      MST = 0
+                      visited = {A:False, B:False, C:True, D: False, E:False}
+                      
+                      PQ = [(4,B),(5,D),(8,E)]
+                      PQ.pop() i.e (4,B)
+                      visited = {A:False, B:True, C:True, D: False, E:False}
+                      MST = 4
+                      
+                      PQ = [(5,D),(8,E), (2,A), (6,E)]
+                      PQ.pop() i.e (2,A)
+                      visited = {A:True, B:True, C:True, D: False, E:False}
+                      MST = 6
+                      
+                      PQ = [(5,D),(8,E), (6,E), (1,D)]
+                      PQ.pop() i.e (1,D)
+                      visited = {A:True, B:True, C:True, D: True, E:False}
+                      MST = 7
+                      
+                      PQ = [(5,D),(8,E), (6,E)]
+                      PQ.pop() i.e (5,D) Do nothing
+                      visited = {A:True, B:True, C:True, D: True, E:False}
+                      MST = 7
+                      
+                      PQ = [(8,E), (6,E)]
+                      PQ.pop() i.e (6,E) 
+                      visited = {A:True, B:True, C:True, D: True, E:True}
+                      MST = 13
+                      
+                      PQ = [(8,E)]
+                      PQ.pop() i.e (8,E) Do nothing
+                      visited = {A:True, B:True, C:True, D: True, E:True}
+                      MST = 13
+                       
 """
 
 
@@ -265,7 +350,7 @@ class GraphAdjList:
     def addWeightedEdge(self, u, v, w):
         self.adj[u].append((w, v))
         if not self.directed:
-            self.adj[v].append(u)
+            self.adj[v].append((w, u))
 
     def printGraph(self):
         print(self.adj)
@@ -369,8 +454,51 @@ class GraphAdjList:
                         heapq.heappush(heap, (distance[nei_node], nei_node))
         return distance
 
+    def bellmanFord(self, source):
+        import math
+        distance = {}
+        for i in range(self.n):
+            distance[i] = math.inf
+        distance[source] = 0
+        negativeCycle = False
+        for i in range(self.n):
+            for u in range(self.n):
+                for nei in self.adj[u]:
+                    w = nei[0]
+                    v = nei[1]
+                    if distance[v] > distance[u] + w:
+                        if i == self.n - 1:  # if we are updating until n-1 cycle then it means it has negative cycle
+                            negativeCycle = True
+                        distance[v] = distance[u] + w
+        return distance, negativeCycle
 
-g2 = GraphAdjList(5, True)
+    def primsAlgorithm(self, source):
+        import heapq
+        heap = []
+        visited = {}
+        for i in range(self.n):
+            visited[i] = False
+        mst = 0
+        heapq.heappush(heap, (0, source))
+        while len(heap) > 0:
+            top = heap[0]
+            heapq.heappop(heap)
+            node = top[1]
+            cost = top[0]
+            if visited[node]:
+                continue
+            mst += cost
+            visited[node] = True
+
+            for nei in self.adj[node]:
+                neiNode = nei[1]
+                weight = nei[0]
+                if not visited[neiNode]:
+                    heapq.heappush(heap, (weight, neiNode))
+        return mst
+
+
+g2 = GraphAdjList(5, False)
 # g2.addEdge(0, 1)
 # g2.addEdge(1, 2)
 # g2.addEdge(0, 2)
@@ -391,3 +519,9 @@ g2 = GraphAdjList(5, True)
 # g2.addWeightedEdge(3, 2, 2)
 #
 # print(g2.djikstra(0))
+
+# distance, negativeCycle = g2.bellmanFord(0)
+# print(distance, negativeCycle)
+
+# minimum_spanning = g2.primsAlgorithm(0)
+# print(minimum_spanning)

@@ -193,3 +193,39 @@ class BalancedBinaryTree:
             if leftHeight == -1 or rightHeight == -1 or abs(leftHeight - rightHeight) > 1:
                 return -1
             return max(leftHeight, rightHeight) + 1
+
+
+class DiameterOfBinaryTree:
+    """
+    f(node) => diameter of subtree
+
+    Diameter can be completely on the left f(node.left) or
+    Diameter can be completely on the right f(node.right)
+    Diameter can pass through the node is given by
+        Height of the left subtree + Height of the right subtree
+
+    f(node) = max(f(node.left), f(node.right), Height(node.left) + Height(node.right))
+    """
+
+    def diameterOfBinaryTree(self, root) -> int:
+        val = self.f(root)
+        return val[0]
+
+    def f(self, node):
+        if node is not None:
+            left = self.f(node.left)
+            right = self.f(node.right)
+            height = max(left[1], right[1]) + 1
+            diameter = max(left[0], right[0], left[1] + right[1])
+            return diameter, height
+        else:
+            return 0, 0
+
+
+# node1 = TreeNode(1)
+# node1.left = TreeNode(2)
+# node1.right = TreeNode(3)
+# node1.left.left = TreeNode(4)
+# node1.left.right = TreeNode(5)
+#
+# print(DiameterOfBinaryTree().diameterOfBinaryTree(node1))

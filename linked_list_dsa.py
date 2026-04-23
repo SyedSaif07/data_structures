@@ -536,4 +536,24 @@ l1.next.next = ListNode(0)
 l1.next.next.next = ListNode(-4)
 l1.next.next.next.next = l1.next
 
+
 # print(LinkedListCycleII().detectCycle(l1))
+
+
+class MiddleOfTheLinkedList:
+    """
+    We will use two pointer algorithm fast and slow pointers.
+    Slow pointer moves one node a time. Fast pointer moves two nodes at a time.
+
+    When fast pointer reaches the end, wherever the slow pointer is - that will be the middle element.
+
+    Mathematically, fast pointer moves 2x finishes at n, 2x = n so x = n/2.
+    """
+
+    def middleNode(self, head):
+        slow = head
+        fast = head
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
