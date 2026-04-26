@@ -82,7 +82,7 @@ Adjacency matrix is used to represent graph.
 Adjacent list implementation fixes adjacent matrix. It consumes less space.
 """
 
-
+from typing import List
 class Graph:
     """
     Adjacency matrix implementation
@@ -525,3 +525,117 @@ g2 = GraphAdjList(5, False)
 
 # minimum_spanning = g2.primsAlgorithm(0)
 # print(minimum_spanning)
+
+
+class CourseSchedule:
+    """
+    This is a direct graph problem where if a cycle is identified then the courses cannot be
+    taken else all courses can be taken.
+
+    Similar to detect cycle, we will use three state U(Unvisited), P(Processed), V(Visited)
+    """
+
+    def __init__(self):
+        self.state = None
+        self.flag = None
+        self.adj = None
+
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        self.adj = []
+        self.flag = True
+        self.state = {}
+        for i in range(numCourses):
+            self.adj.append([])
+            self.state[i] = "U"
+
+        for req in prerequisites:
+            fromNode = req[1]
+            toNode = req[0]
+            self.adj[fromNode].append(toNode)
+
+        for i in range(numCourses):
+            if self.state[i] == "U":
+                self.dfs(i)
+        return self.flag
+
+    def dfs(self, node):
+        if self.state[node] == "U":
+            self.state[node] = "V"
+            for nei in self.adj[node]:
+                self.dfs(nei)
+            self.state[node] = "P"
+        elif self.state[node] == "V":
+            self.flag = False
+
+
+# numCourses = 2
+# prerequisites = [[1,0],[0,1]]
+#
+# print(CourseSchedule().canFinish(numCourses, prerequisites))
+
+
+class NumberOfIslands:
+    def __init__(self):
+        self.grid = None
+
+    def numIslands(self, grid: List[List[str]]) -> int:
+        self.grid = grid
+        count = 0
+        for row in range(len(grid)):  # len(grid) gives the number of rows
+            for col in range(len(grid[0])):  # len(grid[0]) gives the no of columns in a row
+                if self.grid[row][col] == "1":  # we start the dfs only from an island
+                    count += 1
+                    self.dfs(row, col)
+        return count
+
+    def dfs(self, row, col):
+        if self.isValid(row, col):
+            self.grid[row][col] = "2"  # make it to 2 once the piece of land is visited
+            self.dfs(row - 1, col)
+            self.dfs(row + 1, col)
+            self.dfs(row, col - 1)
+            self.dfs(row, col + 1)
+
+    def isValid(self, row, col):
+        if row < 0 or row >= len(self.grid):  # row has to be within the boundary
+            return False
+        if col < 0 or col >= len(self.grid[0]):  # col has to be within the boundary
+            return False
+        if self.grid[row][col] == "1":
+            return True
+        return False
+
+
+# grid = [
+#     ["1", "1", "0", "0", "0"],
+#     ["1", "1", "0", "0", "0"],
+#     ["0", "0", "1", "0", "0"],
+#     ["0", "0", "0", "1", "1"]
+# ]
+#
+# print(NumberOfIslands().numIslands(grid))
+
+
+class FindTheTownJudge:
+    """
+    To solve this problem we use graph's out-degree in-degree concepts.
+
+    Town judge trusts no one, so his out-degree has to be zero.
+
+    Everyone trusts him, so his in-degree has to be n - 1 (-1 to exclude him).
+    """
+
+    def findJudge(self, n: int, trust: List[List[int]]) -> int:
+        outDegree = [0] * (n + 1)  # n + 1 because the nodes given in the problem start from 1 not zero
+        inDegree = [0] * (n + 1)
+
+        for rel in trust:
+            fromNode = rel[0]
+            toNode = rel[1]
+            outDegree[fromNode] += 1
+            inDegree[toNode] += 1
+
+        for i in range(1, n + 1):
+            if inDegree[i] == n - 1 and outDegree[i] == 0:
+                return i
+        return -1
