@@ -253,3 +253,14 @@ class RemoveElement:
 
 # nums = [3, 2, 2, 3]
 # print(RemoveElement().removeElement(nums, 3))
+
+
+class ConcatenationOfArray:
+    def getConcatenation(self, nums: List[int]) -> List[int]:
+        ans = []
+        for _ in range(2):
+            for i in nums:
+                ans.append(i)
+        return ans
+
+# print(ConcatenationOfArray().getConcatenation([1,2,1]))

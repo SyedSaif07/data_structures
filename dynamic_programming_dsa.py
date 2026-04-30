@@ -32,17 +32,25 @@ class JumpGame:
         else:
             return False
 
+    def canJump1(self, nums: List[int]) -> bool:
+        goal = len(nums) - 1
 
-# print(JumpGame().canJump([2, 3, 1, 1, 4]))
+        for i in range(len(nums) - 2, -1, -1):
+            if i + nums[i] >= goal:
+                goal = i
+
+        return True if goal == 0 else False
+
+
+# print(JumpGame().canJump1([2, 3, 1, 1, 4]))
 
 
 class CoinChangeDP:
     def __init__(self):
         self.coins = None
-        self.dp = None
+        self.dp = {}
 
     def coinChange(self, coins, amount: int) -> int:
-        self.dp = {}
         self.coins = coins
         return self.f(amount)
 
@@ -88,4 +96,138 @@ class CoinChangeDP:
         return -1
 
 
-print(CoinChangeDP().coinChange([1, 2, 5], 2))
+# print(CoinChangeDP().coinChange([1, 2, 5], 4))
+
+
+class PartitionEqualSubsetSum:
+    """
+    To partition the array into two parts, we can find the half of total sum of nums.
+
+    We keep adding the total (by summing one number at first and summing the next number to
+    the calculated sum and adding the next number to the added sum of two numbers)
+
+    If we find the target during the summing operation or after the whole dp is calculated,
+    we return True.
+    """
+
+    def canPartition(self, nums: List[int]) -> bool:
+        if sum(nums) % 2 == 1:
+            return False
+
+        target = sum(nums) // 2
+        dp = set()
+        dp.add(0)  # initial sum to be zero
+
+        for i in range(len(nums) - 1, -1, -1):
+            nextDp = set()
+            for t in dp:
+                if t + nums[i] == target:
+                    return True
+                nextDp.add(t)
+                nextDp.add(t + nums[i])  # Summing of one element and two elements and so on.
+            dp = nextDp
+        return True if target in dp else False
+
+
+# print(PartitionEqualSubsetSum().canPartition(nums = [1,5,11,5]))
+
+class TargetSum:
+    """
+    f(i, current_target) => returns no of ways to form current target starting
+    from position i.
+
+    nums = [1,1,1,1,1], target = 3, initially f(0, target) i.e f(0,3)
+
+    I have two options either +1 or -1
+    f(0,3) =  f(1,2) + f(1,4) => f(1,2) when +1, so we need to form +2 from the remaining elements
+                                 to satisfy the target.
+                                 f(1,4) when -1, so we need to for +4 from the remaining elements
+                                 to satisfy the target.
+    f(1,2) = f(2,1) + f(1,3)
+
+    i = n - 1, if |arr[i]| == CT where CT is 1, arr[i] = 0, I can do +0 or -0 so 2.
+                                                arr[i] = 1, so 1.
+                                                ct != arr[i], then 0.
+
+    f(i, ct) => f(i+1, ct + arr[i]) + f(i+1, ct-arr[i])
+    """
+
+    def __init__(self):
+        self.h = {}
+        self.nums = None
+
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        self.nums = nums
+        return self.f(0, target)
+
+    def f(self, i, ct):
+        if i < len(self.nums) - 1:
+            key = (i, ct)
+            if key in self.h:
+                return self.h[key]
+            self.h[key] = self.f(i + 1, ct - self.nums[i]) + self.f(i + 1, ct + self.nums[i])
+            return self.h[key]
+        else:
+            if ct == 0 and self.nums[i] == 0:
+                return 2
+            elif abs(ct) == abs(self.nums[i]):
+                return 1
+            else:
+                return 0
+
+
+# print(TargetSum().findTargetSumWays(nums=[1, 1, 1, 1, 1], target=3))
+
+
+class LongestCommonSubsequence:
+    """
+    Longest common subsequence of any string are character picked from the parent string
+    but in the same order and not necessarily continuous.
+
+    Eg: s1 "abcde" s2 "ace" -  LCS is "ace".
+
+    f(i,j) => LCS[s1[0,...i], s2[0,...j]] i.e s1[i] == s2[j]
+    f(4,3) = 1 + f(3,2)
+             1 is added because 'e' is common.
+
+             f(3,2) s1[i] i.e "d" != s2[j] i.e "c"
+             so we move s1 pointer or s2 pointer
+
+             max(f(2,2), f(3,1)) => 2,2 if s1 pointer is moved and 3,1  if s2 pointer is moved.
+
+    f(i,j) => f(i-1, j-1) + 1 if s1[i] == s2[j]
+                    or
+              max(f(i-1,j),f(i, j-1)
+
+    Base case if i = -1 or  j = -1 there is nothing to compare return 0.
+
+    """
+
+    def __init__(self):
+        self.text2 = None
+        self.text1 = None
+        self.dp = {}
+
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        self.text1 = text1
+        self.text2 = text2
+        n = len(text1)
+        m = len(text2)
+        return self.lcs(n - 1, m - 1)
+
+    def lcs(self, i, j):
+        if i == -1 or j == -1:
+            return 0
+        else:
+            if (i, j) not in self.dp:
+                if self.text1[i] == self.text2[j]:
+                    self.dp[(i, j)] = self.lcs(i - 1, j - 1) + 1
+                else:
+                    self.dp[(i, j)] = max(self.lcs(i - 1, j), self.lcs(i, j - 1))
+            return self.dp[(i, j)]
+
+
+text1 = "abcde"
+text2 = "ace"
+
+# print(LongestCommonSubsequence().longestCommonSubsequence(text1, text2))

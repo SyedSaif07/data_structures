@@ -32,7 +32,7 @@ Types:
     Planar graphs: Graphs that lie in 2-D plane.
 
     Simple graphs: No parallel edges. Parallel edges are two undirected edges for same two nodes.
-                   No self loop. Self loop in an edges starts and ends in the same node.
+                   No self loop. Self loop in an edge starts and ends in the same node.
 
     Cyclic graphs: Path which starts a node and ends in the same node. Any graph that contains
                    a cycle is called as cyclic graphs. It can be both directed and un-directed.
@@ -115,7 +115,7 @@ class Graph:
 """
 Traversals: 
     Breadth first search (BFS): Traverse along the breadth of the graph.
-                                Eg: In a book, you read 1st chapter's 1st page and 2nd chapter's 2nd page.
+                                Eg: In a book, you read 1st chapter's 1st page and 2nd chapter's 1st page.
                                     Like wise 1st chapter's 2nd page and 2nd chapter's 2nd page.
                                 
                                 In an unweighted graph, bfs always visits in the shortest path order.

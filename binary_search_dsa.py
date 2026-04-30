@@ -122,7 +122,7 @@ class FindMinimumInRotateSortedArray:
         return nums[l]
 
 
-print(FindMinimumInRotateSortedArray().findMin3([6, 7, 0, 1, 2, 3, 4, 5]))
+# print(FindMinimumInRotateSortedArray().findMin3([6, 7, 0, 1, 2, 3, 4, 5]))
 
 
 class SearchInARotatedSortedArray:
@@ -168,4 +168,4 @@ class SearchInARotatedSortedArray:
         return -1
 
 
-# print(SearchInARotatedSortedArray().search1([4, 5, 6, 7, 0, 1, 2], 4))
+# print(SearchInARotatedSortedArray().search1([6, 7, 0, 1, 2, 3, 4, 5], 4))

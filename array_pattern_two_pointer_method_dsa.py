@@ -6,7 +6,7 @@ class TwoPointerTwoSum:
     This two pointer method only works for sorted array.
     """
 
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSumSortedArray(self, numbers: List[int], target: int) -> List[int]:
         fp = 0
         sp = len(numbers) - 1
         while fp < sp:
@@ -16,7 +16,21 @@ class TwoPointerTwoSum:
             elif currSumm > target:
                 sp -= 1
             else:
-                return [fp + 1, sp + 1]
+                return [fp, sp]
+
+    def twoSumUnsortedArray(self, nums, target):
+        h_table = {}
+
+        for i in range(len(nums)):
+            diff = target - nums[i]
+            if diff in h_table:
+                return [h_table[diff], i, ]
+            h_table[nums[i]] = i
+
+        return nums
+
+
+# print(TwoPointerTwoSum().twoSumSortedArray([2, 7, 11, 15], 9))
 
 
 class TrappingRainWater:
@@ -42,7 +56,6 @@ class TrappingRainWater:
         for i in range(n-2, -1, -1):
             right[i] = max(right[i + 1], height[i])
 
-        print(left, right)
         ans = 0
         for i in range(n):
             ans += min(left[i], right[i]) - height[i]

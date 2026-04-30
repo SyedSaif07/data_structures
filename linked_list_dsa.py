@@ -40,18 +40,18 @@ class Node:
         return first_node
 
 
-a = Node("A")
-b = Node("B")
-c = Node("C")
-d = Node("D")
+# a = Node("A")
+# b = Node("B")
+# c = Node("C")
+# d = Node("D")
+#
+# head = a
+# a.next = b
+# b.next = c
+# c.next = d
 
-head = a
-a.next = b
-b.next = c
-c.next = d
 
-
-# head = None
+head = None
 
 
 def insert_at_top(data):
@@ -136,7 +136,7 @@ def delete_at_end():
 # insert_at_end("B")
 # insert_at_end("C")
 # insert_at_end("D")
-#
+
 # insert_at_middle("K", 2)
 # insert_at_middle("J", 3)
 
@@ -218,7 +218,6 @@ class MergeSortedLinkedList:
         endNode = None
         head = None
         while p1 is not None or p2 is not None:
-            data = None
             if p1 is not None and p2 is not None:
                 if p1.val <= p2.val:
                     data = p1.val
@@ -284,6 +283,9 @@ class ReverseLinkedList:
     Complexity: O(N)
     """
 
+    def __init__(self):
+        self.newHead = None
+
     def reverseListIteratorHashMapMethod(self, head):
         trace = {}
         curr = head
@@ -315,7 +317,6 @@ class ReverseLinkedList:
         return newHead
 
     def reverseList(self, head):
-        self.newHead = None
         if head is not None:
             lastNode = self.reverse(head)
             lastNode.next = None

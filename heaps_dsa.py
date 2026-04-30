@@ -100,6 +100,7 @@ class MedianFinder:
 # param_2 = obj.findMedian()
 # print(param_2)
 
+
 class KthLargestStream:
     """
     Store highest k elements seen so far in the min heap. Whichever is the smallest of that
@@ -120,7 +121,7 @@ class KthLargestStream:
             heapq.heappop(self.minHeap)
             heapq.heappush(self.minHeap, val)
 
-        return self.minHeap[0]
+        # return self.minHeap[0]
 
     def printKLargest(self):
         print(self.minHeap[0])

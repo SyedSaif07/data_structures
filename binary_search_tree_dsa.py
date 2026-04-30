@@ -44,7 +44,7 @@ Inorder predecessor: Node that comes before in the inorder traversal.
                                  single child which can be deleted easily.
 
 """
-
+from typing import Optional
 
 # Definition for a binary tree node.
 class TreeNode:
@@ -85,7 +85,7 @@ node.left.right = TreeNode(4)
 node.left.left.left = TreeNode(1)
 
 
-# print(KthSmallestBST().kthSmallest(node, 3))
+# print(KthSmallestBST().kthSmallest(node, 4))
 
 
 class ValidBST:
@@ -122,3 +122,67 @@ class LowestCommonAncestorBST:
             return self.lowestCommonAncestor(root.right, p, q)
         else:
             return root
+
+
+class TwoSum4InputIsBST:
+    """
+    This problem can be solved in all three - preorder postorder inorder traversals.
+    """
+
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        values = set()
+
+        def preorder(node):
+            if node is None:
+                return False
+
+            if k - node.val in values:
+                return True
+            values.add(node.val)
+
+            if preorder(node.left):
+                return True
+
+            if preorder(node.right):
+                return True
+            return False
+
+        # def postorder(node):
+        #     if node is None:
+        #         return False
+        #
+        #     if postorder(node.left):
+        #         return True
+        #
+        #     if postorder(node.right):
+        #         return True
+        #
+        #     if k - node.val in values:
+        #         return True
+        #     values.add(node.val)
+        #
+        #     return False
+        #
+        # return postorder(root)
+
+        # def inorder(node):
+        #     if node is None:
+        #         return False
+        #
+        #     if postorder(node.left):
+        #         return True
+        #
+        #     if k - node.val in values:
+        #         return True
+        #     values.add(node.val)
+        #
+        #     if postorder(node.right):
+        #         return True
+        #
+        #     return False
+
+        # return inorder(root)
+
+        # return postorder(root)
+
+        return preorder(root)

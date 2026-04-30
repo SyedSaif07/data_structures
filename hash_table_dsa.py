@@ -58,7 +58,7 @@ Hash Table Types:
 
 """
 
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 ht = OrderedDict()
 
@@ -154,4 +154,35 @@ def longest_consecutive_sequence(nums):
     return longest
 
 
-print(longest_consecutive_sequence([0, 0, -1]))
+# print(longest_consecutive_sequence([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]))
+
+class ValidAnagram:
+
+    def isAnagram1(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
+
+    def isAnagram2(self, s: str, t: str) -> bool:
+        return "".join(sorted(s)) == "".join(sorted(t))
+
+    def isAnagram3(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        s_counter = Counter(s)
+        t_counter = Counter(t)
+        for i in s_counter:
+            if s_counter[i] != t_counter[i]:
+                return False
+        return True
+
+    def isAnagram4(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        counter = {}
+        for i in s:
+            counter[i] = counter.get(i, 0) + 1
+
+        for j in t:
+            if j not in counter or counter[j] == 0:
+                return False
+            counter[j] -= 1
+        return True

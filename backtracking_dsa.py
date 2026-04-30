@@ -23,6 +23,9 @@ class CombinationSum:
     Like this we will try all the combinations.
     """
 
+    def __init__(self):
+        self.answers = None
+
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         self.answers = []
         self.f(0, target, [], candidates)
@@ -33,6 +36,7 @@ class CombinationSum:
             if rem == 0:
                 self.answers.append([num for num in combinations])
         else:
+
             maxTimes = rem // candidates[i]
             for k in range(maxTimes + 1):
                 newTarget = rem
@@ -42,3 +46,33 @@ class CombinationSum:
                 self.f(i + 1, newTarget, combinations, candidates)
                 for j in range(k):
                     combinations.pop()
+
+
+# print(CombinationSum().combinationSum([2, 3, 6, 7], 7))
+
+
+class Subsets:
+    def __init__(self):
+        self.nums = None
+        self.subset = []
+        self.subsets = []
+
+    def getSubsets(self, nums: List[int]) -> List[List[int]]:
+        self.nums = nums
+        self.backtrack(0)
+        return self.subsets
+
+    def backtrack(self, i):
+        if i == len(self.nums):
+            ans = []
+            for num in self.subset:
+                ans.append(num)
+            self.subsets.append(ans)
+        else:
+            self.backtrack(i + 1)
+
+            self.subset.append(self.nums[i])
+            self.backtrack(i + 1)
+            self.subset.pop()
+
+# print(Subsets().getSubsets([1, 2, 3]))
