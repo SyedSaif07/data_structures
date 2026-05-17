@@ -19,6 +19,22 @@ from collections import deque
 from typing import List
 
 
+class ClimbingStairs:
+    def climbStairs(self, n: int) -> int:
+        if n <= 3: return n
+        prev1 = 3
+        prev2 = 2
+
+        for _ in range(3, n):
+            cur = prev1 + prev2
+            prev2 = prev1
+            prev1 = cur
+        return cur
+
+
+# print(ClimbingStairs().climbStairs(45))
+
+
 class JumpGame:
     def canJump(self, nums) -> bool:
         max_reachable = nums[0]
@@ -158,7 +174,19 @@ class TargetSum:
 
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
         self.nums = nums
-        return self.f(0, target)
+        dp = {}
+
+        def f1(i, total):
+            if i == len(nums):
+                return 1 if total == target else 0
+            if (i, total) in self.h:
+                return self.h[(i, total)]
+            dp[(i, total)] = (f1(i + 1, total + nums[i]) + f1(i + 1, total - nums[i]))
+
+            return dp[(i, total)]
+
+        # return self.f(0, target)
+        return f1(0, 0)
 
     def f(self, i, ct):
         if i < len(self.nums) - 1:
@@ -230,4 +258,85 @@ class LongestCommonSubsequence:
 text1 = "abcde"
 text2 = "ace"
 
+
 # print(LongestCommonSubsequence().longestCommonSubsequence(text1, text2))
+
+
+class LongestPalindrome:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        ans = [0, 0]
+
+        for i in range(n):
+            dp[i][i] = True
+
+        for i in range(n - 1):
+            if s[i] == s[i + 1]:
+                dp[i][i + 1] = True
+                ans = [i, i + 1]
+
+        for diff in range(2, n):
+            for i in range(n - diff):
+                j = i + diff
+                if s[i] == s[j] and dp[i + 1][j - 1]:
+                    dp[i][j] = True
+                    ans = [i, j]
+
+        i, j = ans
+
+        return s[i: j + 1]
+
+
+# print(LongestPalindrome().longestPalindrome('racecard'))
+
+
+class HouseRobber:
+    """
+    f(i, canRob) max value that I can rob by robbing ith house. canRob tells me whether
+    I can rob that house or not.
+
+    f(0, True) => means by default 0th house can be robbed. It does not mean I have to rob it.
+                  We can choose to rob it or not.
+
+                  Eg: nums = [2,1,3,9]
+                  If I chose to rob it, then
+                  f(0, True) = nums[0] + f(1, False) => canRob is False here because previous house is robbed.
+
+                  If I chose not to rob it, then
+                  f(0, True) = f(1, True)
+
+                  Finally f(0, True) => max( nums[0] + f(1, False), f(1, True) )
+
+    f(1, False) => f(2, True)
+                   f(1, True) => nums[1] + f(2, False)
+
+                   max( nums[1] + f(2, False), f(2, True) )
+
+    Last base case, when I'm at the end and if I can rob the house it is better to rob it.
+    """
+
+    def __init__(self):
+        self.nums = None
+        self.dp = {}
+
+    def rob(self, nums: List[int]) -> int:
+        self.nums = nums
+        return self.f(0, True)
+
+    def f(self, i, canRob):
+        if i == len(self.nums) - 1:
+            if canRob:
+                return self.nums[i]
+            else:
+                return 0
+        else:
+            if (i, canRob) not in self.dp:
+                if canRob:
+                    self.dp[(i, canRob)] = max(self.nums[i] + self.f(i + 1, False), self.f(i + 1, True))
+                else:
+                    self.dp[(i, canRob)] = self.f(i + 1, True)
+            return self.dp[(i, canRob)]
+
+# nums = [1,2,3,1]
+# print(HouseRobber().rob(nums))

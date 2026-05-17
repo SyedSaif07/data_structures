@@ -187,9 +187,11 @@ def mergeSort(myList):
             k += 1
 
 
+#
 # myList = [54, 26, 93, 17]
 # mergeSort(myList)
 # print(myList)
+
 
 class MergeSortedArrays:
     """
@@ -291,7 +293,8 @@ def partition_algorithm():
 # partition_algorithm()
 
 
-a = [10, 50, 40, 20, 15, 16, 2, 3, 8, 9, 99, 34, 43, 100, 121, 104, 132]
+# a = [10, 50, 40, 20, 15, 16, 2, 3, 8, 9, 99, 34, 43, 100, 121, 104, 132]
+a = [1, 5, 2, 6, 0, 4, 3]
 
 
 def partition(start, end):
@@ -326,8 +329,8 @@ def quick_sort(left, right):
         quick_sort(partition_point + 1, right)  # elements in the right after partition point
 
 
-# quick_sort(0, len(a) - 1)
-# print(a)
+quick_sort(0, len(a) - 1)
+print(a)
 
 
 class MoveZeroes:

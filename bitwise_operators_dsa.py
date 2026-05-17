@@ -70,7 +70,8 @@ class BitwiseXORSingleNumber:
         return ans
 
 
-# print(BitwiseXORSingleNumber().singleNumber([4,1,2,1,2]))
+print(BitwiseXORSingleNumber().singleNumber([4, 1, 2, 1, 2]))
+
 
 class BitWiseCountingBits:
     def countBits(self, n: int):

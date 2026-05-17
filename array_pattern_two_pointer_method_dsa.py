@@ -81,3 +81,54 @@ class RemoveDuplicatesFromSortedArray:
 # k = RemoveDuplicatesFromSortedArray().removeDuplicates(nums)
 # print(nums)
 # print(nums[:k])
+
+
+class ContainerWithMostWater:
+    def maxArea(self, height: List[int]) -> int:
+        i = 0
+        j = len(height) - 1
+
+        area = 0
+
+        while i < j:
+            area = max(area, (j - i) * min(height[i], height[j]))
+
+            if height[i] < height[j]:
+                i += 1
+            else:
+                j -= 1
+        return area
+
+
+# height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+# print(ContainerWithMostWater().maxArea(height))
+
+
+class ThreeSumClosest:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        n = len(nums)
+        closest_sum = float("inf")
+
+        for i in range(n):
+            left = i + 1
+            right = n - 1
+
+            while left < right:
+                curr_sum = nums[i] + nums[left] + nums[right]
+
+                if abs(curr_sum - target) < abs(closest_sum - target):
+                    closest_sum = curr_sum
+
+                if curr_sum == target:
+                    return curr_sum
+
+                if curr_sum < target:
+                    left += 1
+                elif curr_sum > target:
+                    right -= 1
+
+        return closest_sum
+
+
+# print(ThreeSumClosest().threeSumClosest(nums = [-1,2,1,-4], target = 1))

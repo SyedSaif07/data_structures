@@ -25,6 +25,8 @@ For any child, its parent will be at (i-1)/2
 
 """
 import heapq
+from collections import Counter
+from typing import List
 
 
 def kth_largest_element_array(nums, k):
@@ -130,3 +132,22 @@ class KthLargestStream:
 # Your KthLargest object will be instantiated and called as such:
 # obj = KthLargestStream(3, [1, 7, 9, 54, 0])
 # obj.printKLargest()
+
+
+class TopKFrequentElements:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        nums = Counter(nums)
+        heap = []
+
+        for key in nums:
+            heapq.heappush(heap, (nums[key], key))
+            if len(heap) > k:
+                heapq.heappop(heap)
+
+        return [i[1] for i in heap]
+
+
+nums = [1, 1, 1, 2, 2, 3]
+k = 2
+
+# print(TopKFrequentElements().topKFrequent(nums, k))

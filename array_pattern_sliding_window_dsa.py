@@ -126,3 +126,32 @@ class SlidingWindowMaximum:
 
 # print(SlidingWindowMaximum().maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
 
+def find_recurring_longest_sequence():
+    from collections import defaultdict
+    k = ['milk', 'catalog', 'c+', 'python', 'cat', 'dog', 'cashless', 'encashment']
+
+    hash_map = defaultdict(set)
+
+    for idx, word in enumerate(k):
+        n = len(word)
+
+        for i in range(n):
+            for j in range(i + 1, n + 1):
+                substr = word[i:j]
+                hash_map[substr].add(idx)  # track unique words
+
+    recurring = []
+
+    for substr, word_ids in hash_map.items():
+        if len(word_ids) > 1:
+            recurring.append((substr, len(word_ids)))
+
+    recurring.sort(
+        key=lambda x: (len(x[0]), x[1]),
+        reverse=True
+    )
+
+    print(recurring[0][0])
+
+
+# find_recurring_longest_sequence()

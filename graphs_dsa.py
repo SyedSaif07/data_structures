@@ -80,9 +80,38 @@ Adjacency matrix is used to represent graph.
     Use adjacency matrix for < 1000 nodes. Not suitable for >1000 nodes.
 
 Adjacent list implementation fixes adjacent matrix. It consumes less space.
+
+DAG - Directed Acyclic Graphs:
+    The two properties of DAG is directed and acyclic properties. More than properties,
+    DAGs have practical applications.
+
+    To detect a DAG, we can use dfs. If a graph is directed and doesn't have a cycle then it
+    is a DAG else if it is directed but has a cycle then it is not a DAG.
+
+    Topological sorting: This concept is applicable only for DAGs.
+                         This sorting is applied by writing down the nodes in such a manner
+                         if there is an edge between U to V then U comes before V.
+                         0 -> 1 -> 2 -> 3 -> 4
+                         0 -> 2 -> 1 -> 4 -> 3
+                         0 -> 2 -> 1 -> 3 -> 3
+
+                         For the edge between 0 and 1, 0 comes before 1.
+
+                         Any order that satisfies this condition then that is called
+                         topological sorting.
+
+                         Eg: If there are 4 courses in college, A, B, C, D.
+                         Before A, take B
+                         Before B, take C
+                         Before C, take D
+                         Before B, take D
+
+                         is it possible to take all the courses? D C B A
 """
 
 from typing import List
+
+
 class Graph:
     """
     Adjacency matrix implementation
@@ -110,226 +139,6 @@ class Graph:
 # g1.addEdge(1, 3, 50)
 # g1.addEdge(0, 3, 45)
 # g1.printGraph()
-
-
-"""
-Traversals: 
-    Breadth first search (BFS): Traverse along the breadth of the graph.
-                                Eg: In a book, you read 1st chapter's 1st page and 2nd chapter's 1st page.
-                                    Like wise 1st chapter's 2nd page and 2nd chapter's 2nd page.
-                                
-                                In an unweighted graph, bfs always visits in the shortest path order.
-                                
-                                0-1 bfs applicable on binary weighted graphs where the weights are 0 or 1. We will use 
-                                deque - sometimes we will push at the front sometimes at the end. But we will pop
-                                from the front always.
-
-    Depth first search (BFS): Traverse along the depth of the graph. Visit all the nodes of the branch you picked
-                              and move to the next branch.
-                              Eg: Read the complete 1st chapter and then go to the 2nd chapter.
-                              
-Cycle detection: 
-    It is not necessary that the full graph is in cycle. It is enough that few nodes are
-    in a cycle. And wherever there is a cycle we must be able to detect it.
-    
-    Many problems in the real world can be solved by cycle detection algorithm.
-    
-    Using cycle detection in a directed graph, we can identify whether a graph is a DAG or not.
-    DAG is Directed Acyclic Graph. DAGs can help us simulate many real world applications.
-    
-    There are specific algorithms that run only on DAG algorithm.
-    
-    Curl back is essential for cycle where the branch comes back to one of its own node of the same branch.
-    If not, it won't be a cycle. Curling back doesn't always mean there is a cycle.
-    
-    Scenario 1: All edges going forward so there is no cycle.
-    Scenario 2: Edges coming back to the same branch so there is a cycle.
-    Scenario 3: When there is a backward edge, but it going to a different branch then there
-                is no cycle.
-                
-    Back edge is actually creating cycle.
-    
-    To detect cycle, we will again use hash table. In this we will maintain 3 states of
-    any node. 
-        Untouched/Unvisited(U) : Node has never been touched or visited.
-        Visited(V): Node has been visited.
-        Processed(P): Visited the node and processed all its children.
-        
-    Back edge is identified when you visit a node (mark it as visited) and start processing
-    its children where the child is already visited, then that is a back edge.
-    Eg: A visited -> B visited -> D visited -> F processed -> E visited -> B visited.
-
-DAG - Directed Acyclic Graphs:
-    The two properties of DAG is directed and acyclic properties. More than properties,
-    DAGs have practical applications.
-    
-    To detect a DAG, we can use dfs. If a graph is directed and doesnt have a cycle then it
-    is a DAG else if it is directed but has a cycle then it is not a DAG.
-    
-    Topological sorting: This concept is applicable only for DAGs.
-                         This sorting is applied by writing down the nodes in such a manner
-                         if there is an edge between U to V then U comes before V.
-                         0 -> 1 -> 2 -> 3 -> 4
-                         0 -> 2 -> 1 -> 4 -> 3
-                         0 -> 2 -> 1 -> 3 -> 3
-                         
-                         For the edge between 0 and 1, 0 comes before 1. 
-                         
-                         Any order that satisfies this condition then that is called
-                         topological sorting.
-                         
-                         Eg: If there are 4 courses in college, A, B, C, D.
-                         Before A, take B 
-                         Before B, take C
-                         Before C, take D
-                         Before B, take D
-                          
-                         is it possible to take all the courses? D C B A
-                         
-Single Source Shortest Path:
-    In a weighted direct graph, from a source node how much shortest weight with which
-    each node can be reached.
-    Eg: Source A, {B: 2, C:2, D:6, E: infinity}
-    E is infinity because E cannot be reached from A.
-    
-    Dijkstra's Algorithm: When the graph has non negative edge weights.
-                          This is a greedy algorithm.
-                          
-                          To implement this algorithm, there will be a source node A
-                          provided in the problem. We create a hash table that contains the 
-                          distance of all nodes.Distance of source node is 0. All other node's
-                          distances are infinity. As we discover the other nodes through the source
-                          we will update the distance of that respective node.
-                          {A:0, B:∞, C:∞, D:∞, E:∞}
-                          
-                          We will maintain a priority queue, [(0,A)] at first. -> [(distance, node)]
-                          While pq is not empty, 
-                            top = pq.pop()
-                            d[B] = d[A] + d[B] = 0 + 2 = 2
-                            pq = [(B,2)]
-                            d[C] = d[A] + d[C] = 0 + 1 = 1
-                            pq = [(B,2), (C, 1)]
-                            {A:0, B:2, C:1, D:∞, E:∞}
-                         
-                         The core idea behind this algorithm is it traverses the shortest
-                         distance first. From A there are two nodes available but the shortest
-                         is C. 
-                            pq.pop() => C pops out
-                            pq = [(B,2)]
-                            d[D] = d[C] + d[D] = 1 + 5 = 6
-                            {A:0, B:2, C:1, D:6, E:∞}
-                            pq = [(B,2), (6,D)]
-                            pq.pop() => B pops out
-                            pq = [(6,D)]
-                        
-                        From B there are two nodes, C and D
-                            d[C] = d[B] + d[C] = 2 + 0 = 2 but I already know the distance of C is 1.
-                            so we won't update the distance of C
-                            d[D] = d[B] + d[D] = 2 + 3 = 5 Now the distance of D will be updated to 5 as it 
-                            is lesser than the old distance of D.
-                            pq = [(6,D), (5,D)]
-                            {A:0, B:2, C:1, D:5, E:∞}
-                        
-                        Now when we pop pq, it will be (5,D). From D the outgoing edge is E.
-                            pq = [(6,D)]
-                            d[E] = d[D] + d[E] = 5 + 6 = 11
-                            {A:0, B:2, C:1, D:5, E:11}
-                            pq = [(6,D), (11, E)]
-                        
-                        In the next iteration we pop (6,D) but we found optimal distances so we will
-                        ignore this. And pop (11,E) but E doesnt have nodes to reach to. Now my algorithm will
-                        stop.
-                        
-                        With negative edge weights, we cannot find the shortest path with this
-                        algorithm, as more edges we traverse more loops we do the lesser total
-                        distance becomes. So this algorithm is not suitable in case of negative
-                        edge weights.
-                            
-    Bellman Ford Algorithm: DP based algorithm. 
-                            Applicable even for negative edge weights. It is able to detect.
-                            Edges: 
-                            3 -> 4 (6) 
-                            1 -> 2 (0)
-                            1 -> 3 (3)
-                            2 -> 3 (4)
-                            0 -> 2 (2)
-                            0 -> 1 (1)
-                            
-                            Initially {0:0, 1:∞, 2:∞, 3:∞, 4:∞}
-                            Relaxing edge is done by - u -> v (w)
-                            d[v] = d[u] + w
-                            if d[u] + w < d[v]:
-                                d[v] = d[u] + w
-                            
-                            0 -> 2 d[2] = 0 + 2 = 2 < ∞
-                            {0:0, 1:∞, 2:2, 3:∞, 4:∞}
-                            
-                            0 -> 1 d[1] = 0 + 1 = 1 < ∞
-                            {0:0, 1:1, 2:2, 3:∞, 4:∞}
-                            
-                            We have to repeat this process number of vertices - 1 times. For 5 vertices,
-                            we have to repeat these steps 4 times.
-                            
-                            1 -> 2(0) d[2] = d[1] + w = 1 + 0 = 1 < 2
-                            {0:0, 1:1, 2:1, 3:∞, 4:∞}
-                            
-                            1 -> 3 (3) d[3] = d[1] i.e 1 + 3 = 4 < ∞
-                            {0:0, 1:1, 2:1, 3:4, 4:∞}
-                            
-                            3 -> 4 (6) d[4] = d[3] i.e. 4 + 6 = 10 < ∞
-                            {0:0, 1:1, 2:1, 3:4, 4:10}
-                            
-                            Any shortest path in the graph will have maximum v-1 edges.
-    
-Minimum Spanning Tree:
-    A Minimum Spanning Tree (MST) of a connected, undirected, weighted graph is a subgraph that connects all vertices 
-    together with the minimum possible total edge weight and without any cycles. 
-    
-    A tree is a subset of graph. A spanning tree is a subgraph. A spanning tree spans across
-    the nodes of one connected component.
-    
-    A graph can have many spanning trees. Minimum spanning tree is to find the spanning
-    tree with minimum weight.
-    
-    Prim's Algorithm: A-B-C-D-E Start with any node eg: C, MST = 0 
-                      visited = {A:False, B:False, C:False, D: False, E:False}
-                      
-                      PQ=[(0,C)] 
-                      PQ.pop() i.e (0,C)
-                      MST = 0
-                      visited = {A:False, B:False, C:True, D: False, E:False}
-                      
-                      PQ = [(4,B),(5,D),(8,E)]
-                      PQ.pop() i.e (4,B)
-                      visited = {A:False, B:True, C:True, D: False, E:False}
-                      MST = 4
-                      
-                      PQ = [(5,D),(8,E), (2,A), (6,E)]
-                      PQ.pop() i.e (2,A)
-                      visited = {A:True, B:True, C:True, D: False, E:False}
-                      MST = 6
-                      
-                      PQ = [(5,D),(8,E), (6,E), (1,D)]
-                      PQ.pop() i.e (1,D)
-                      visited = {A:True, B:True, C:True, D: True, E:False}
-                      MST = 7
-                      
-                      PQ = [(5,D),(8,E), (6,E)]
-                      PQ.pop() i.e (5,D) Do nothing
-                      visited = {A:True, B:True, C:True, D: True, E:False}
-                      MST = 7
-                      
-                      PQ = [(8,E), (6,E)]
-                      PQ.pop() i.e (6,E) 
-                      visited = {A:True, B:True, C:True, D: True, E:True}
-                      MST = 13
-                      
-                      PQ = [(8,E)]
-                      PQ.pop() i.e (8,E) Do nothing
-                      visited = {A:True, B:True, C:True, D: True, E:True}
-                      MST = 13
-                       
-"""
 
 
 class GraphAdjList:
@@ -369,6 +178,18 @@ class GraphAdjList:
                     visited[nei] = True
 
     def bfs(self):
+        """
+        Breadth first search (BFS):
+            Traverse along the breadth of the graph.
+            Eg: In a book, you read 1st chapter's 1st page and 2nd chapter's 1st page.
+            Like wise 1st chapter's 2nd page and 2nd chapter's 2nd page.
+
+            In an unweighted graph, bfs always visits in the shortest path order.
+
+            0-1 bfs applicable on binary weighted graphs where the weights are 0 or 1. We will use
+            deque - sometimes we will push at the front sometimes at the end. But we will pop
+            from the front always.
+        """
         visited = {}
         for i in range(self.n):
             visited[i] = False
@@ -398,6 +219,13 @@ class GraphAdjList:
                     self.dfsRecurrCore(nei, visited)
 
     def dfs(self):
+        """
+        Depth first search (BFS):
+            Traverse along the depth of the graph. Visit all the nodes of the branch you picked
+            and move to the next branch.
+            Eg: Read the complete 1st chapter and then go to the 2nd chapter.
+        """
+
         visited = {}
         for i in range(self.n):
             visited[i] = False
@@ -419,6 +247,39 @@ class GraphAdjList:
             print("Cycle found at " + str(source))
 
     def detect_cycle(self):
+        """
+        Cycle detection:
+            It is not necessary that the full graph is in cycle. It is enough that few nodes are
+            in a cycle. And wherever there is a cycle we must be able to detect it.
+
+            Many problems in the real world can be solved by cycle detection algorithm.
+
+            Using cycle detection in a directed graph, we can identify whether a graph is a DAG or not.
+            DAG is Directed Acyclic Graph. DAGs can help us simulate many real world applications.
+
+            There are specific algorithms that run only on DAG algorithm.
+
+            Curl back is essential for cycle where the branch comes back to one of its own node of the same branch.
+            If not, it won't be a cycle. Curling back doesn't always mean there is a cycle.
+
+            Scenario 1: All edges going forward so there is no cycle.
+            Scenario 2: Edges coming back to the same branch so there is a cycle.
+            Scenario 3: When there is a backward edge, but it's going to a different branch then there
+            is no cycle.
+
+            Back edge is actually creating cycle.
+
+            To detect cycle, we will again use hash table. In this we will maintain 3 states of
+            any node.
+                Untouched/Unvisited(U) : Node has never been touched or visited.
+                Visited(V): Node has been visited.
+                Processed(P): Visited the node and processed all its children.
+
+            Back edge is identified when you visit a node (mark it as visited) and start processing
+            its children where the child is already visited, then that is a back edge.
+            Eg: A visited -> B visited -> D visited -> F processed -> E visited -> B visited.
+        """
+
         state = {}
         for i in range(self.n):
             state[i] = "U"
@@ -428,6 +289,66 @@ class GraphAdjList:
                 self.dfsDetectCycleCore(i, state)
 
     def djikstra(self, source):
+        """
+        Single-Source-Shortest Path:
+            In a weighted direct graph, from a source node how much shortest weight with which
+            each node can be reached.
+            Eg: Source A, {B: 2, C:2, D:6, E: infinity}
+            E is infinity because E cannot be reached from A.
+        Dijkstra's Algorithm:
+            When the graph has non-negative edge weights.
+            This is a greedy algorithm.
+
+            To implement this algorithm, there will be a source node A
+            provided in the problem. We create a hash table that contains the
+            distance of all nodes.Distance of source node is 0. All other node's
+            distances are infinity. As we discover the other nodes through the source
+                          we will update the distance of that respective node.
+                          {A:0, B:∞, C:∞, D:∞, E:∞}
+
+                          We will maintain a priority queue, [(0,A)] at first. -> [(distance, node)]
+                          While pq is not empty,
+                            top = pq.pop()
+                            d[B] = d[A] + d[B] = 0 + 2 = 2
+                            pq = [(B,2)]
+                            d[C] = d[A] + d[C] = 0 + 1 = 1
+                            pq = [(B,2), (C, 1)]
+                            {A:0, B:2, C:1, D:∞, E:∞}
+
+                         The core idea behind this algorithm is it traverses the shortest
+                         distance first. From A there are two nodes available but the shortest
+                         is C.
+                            pq.pop() => C pops out
+                            pq = [(B,2)]
+                            d[D] = d[C] + d[D] = 1 + 5 = 6
+                            {A:0, B:2, C:1, D:6, E:∞}
+                            pq = [(B,2), (6,D)]
+                            pq.pop() => B pops out
+                            pq = [(6,D)]
+
+                        From B there are two nodes, C and D
+                            d[C] = d[B] + d[C] = 2 + 0 = 2 but I already know the distance of C is 1.
+                            so we won't update the distance of C
+                            d[D] = d[B] + d[D] = 2 + 3 = 5 Now the distance of D will be updated to 5 as it
+                            is lesser than the old distance of D.
+                            pq = [(6,D), (5,D)]
+                            {A:0, B:2, C:1, D:5, E:∞}
+
+                        Now when we pop pq, it will be (5,D). From D the outgoing edge is E.
+                            pq = [(6,D)]
+                            d[E] = d[D] + d[E] = 5 + 6 = 11
+                            {A:0, B:2, C:1, D:5, E:11}
+                            pq = [(6,D), (11, E)]
+
+                        In the next iteration we pop (6,D) but we found optimal distances so we will
+                        ignore this. And pop (11,E) but E doesn't have nodes to reach to. Now my algorithm will
+                        stop.
+
+                        With negative edge weights, we cannot find the shortest path with this
+                        algorithm, as more edges we traverse more loops we do the lesser total
+                        distance becomes. So this algorithm is not suitable in case of negative
+                        edge weights.
+        """
         import heapq
         import math
         heap = []
@@ -455,6 +376,44 @@ class GraphAdjList:
         return distance
 
     def bellmanFord(self, source):
+        """
+        Bellman Ford Algorithm:
+            DP based algorithm.
+            Applicable even for negative edge weights. It is able to detect.
+            Edges:
+                 3 -> 4 (6)
+                 1 -> 2 (0)
+                 1 -> 3 (3)
+                 2 -> 3 (4)
+                 0 -> 2 (2)
+                 0 -> 1 (1)
+
+                 Initially {0:0, 1:∞, 2:∞, 3:∞, 4:∞}
+                 Relaxing edge is done by - u -> v (w)
+                 d[v] = d[u] + w
+                 if d[u] + w < d[v]:
+                 d[v] = d[u] + w
+
+                 0 -> 2 d[2] = 0 + 2 = 2 < ∞
+                 {0:0, 1:∞, 2:2, 3:∞, 4:∞}
+
+                 0 -> 1 d[1] = 0 + 1 = 1 < ∞
+                 {0:0, 1:1, 2:2, 3:∞, 4:∞}
+
+                 We have to repeat this process (number of vertices -1 times). For 5 vertices,
+                 we have to repeat these steps 4 times.
+
+                 1 -> 2(0) d[2] = d[1] + w = 1 + 0 = 1 < 2
+                 {0:0, 1:1, 2:1, 3:∞, 4:∞}
+
+                 1 -> 3 (3) d[3] = d[1] i.e 1 + 3 = 4 < ∞
+                 {0:0, 1:1, 2:1, 3:4, 4:∞}
+
+                 3 -> 4 (6) d[4] = d[3] i.e. 4 + 6 = 10 < ∞
+                 {0:0, 1:1, 2:1, 3:4, 4:10}
+
+                 Any shortest path in the graph will have maximum v-1 edges.
+        """
         import math
         distance = {}
         for i in range(self.n):
@@ -473,6 +432,55 @@ class GraphAdjList:
         return distance, negativeCycle
 
     def primsAlgorithm(self, source):
+        """
+        Minimum Spanning Tree:
+            A Minimum Spanning Tree (MST) of a connected, undirected, weighted graph is a subgraph that connects all vertices
+            together with the minimum possible total edge weight and without any cycles.
+
+            A tree is a subset of graph. A spanning tree is a subgraph. A spanning tree spans across
+            the nodes of one connected component.
+
+            A graph can have many spanning trees. Minimum spanning tree is to find the spanning
+            tree with minimum weight.
+
+            Prim's Algorithm: A-B-C-D-E Start with any node eg: C, MST = 0
+                      visited = {A:False, B:False, C:False, D: False, E:False}
+
+                      PQ=[(0,C)]
+                      PQ.pop() i.e (0,C)
+                      MST = 0
+                      visited = {A:False, B:False, C:True, D: False, E:False}
+
+                      PQ = [(4,B),(5,D),(8,E)]
+                      PQ.pop() i.e (4,B)
+                      visited = {A:False, B:True, C:True, D: False, E:False}
+                      MST = 4
+
+                      PQ = [(5,D),(8,E), (2,A), (6,E)]
+                      PQ.pop() i.e (2,A)
+                      visited = {A:True, B:True, C:True, D: False, E:False}
+                      MST = 6
+
+                      PQ = [(5,D),(8,E), (6,E), (1,D)]
+                      PQ.pop() i.e (1,D)
+                      visited = {A:True, B:True, C:True, D: True, E:False}
+                      MST = 7
+
+                      PQ = [(5,D),(8,E), (6,E)]
+                      PQ.pop() i.e (5,D) Do nothing
+                      visited = {A:True, B:True, C:True, D: True, E:False}
+                      MST = 7
+
+                      PQ = [(8,E), (6,E)]
+                      PQ.pop() i.e (6,E)
+                      visited = {A:True, B:True, C:True, D: True, E:True}
+                      MST = 13
+
+                      PQ = [(8,E)]
+                      PQ.pop() i.e (8,E) Do nothing
+                      visited = {A:True, B:True, C:True, D: True, E:True}
+                      MST = 13
+        """
         import heapq
         heap = []
         visited = {}
@@ -499,6 +507,8 @@ class GraphAdjList:
 
 
 g2 = GraphAdjList(5, False)
+
+
 # g2.addEdge(0, 1)
 # g2.addEdge(1, 2)
 # g2.addEdge(0, 2)
@@ -606,13 +616,14 @@ class NumberOfIslands:
         return False
 
 
-# grid = [
-#     ["1", "1", "0", "0", "0"],
-#     ["1", "1", "0", "0", "0"],
-#     ["0", "0", "1", "0", "0"],
-#     ["0", "0", "0", "1", "1"]
-# ]
-#
+grid = [
+    ["1", "1", "0", "0", "0"],
+    ["1", "1", "0", "0", "0"],
+    ["0", "0", "1", "0", "0"],
+    ["0", "0", "0", "1", "1"]
+]
+
+
 # print(NumberOfIslands().numIslands(grid))
 
 
@@ -639,3 +650,51 @@ class FindTheTownJudge:
             if inDegree[i] == n - 1 and outDegree[i] == 0:
                 return i
         return -1
+
+
+class SurroundedRegions:
+    """
+    Using a U(Unknown) state to use it for comparison.
+
+    Using DFS from the edge rows and edge columns to identify that
+    there are no regions accessible by the edge. If it is then it won't be captured.
+    """
+
+    def solve(self, board: List[List[str]]) -> None:
+        m = len(board)
+        n = len(board[0])
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "O":
+                    board[i][j] = "U"
+
+        for j in range(n):
+            self.dfs(0, j, board)
+            self.dfs(m - 1, j, board)
+
+        for i in range(m):
+            self.dfs(i, 0, board)
+            self.dfs(i, n - 1, board)
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "U":
+                    board[i][j] = "X"
+
+    def dfs(self, row, col, board):
+        if 0 <= row < len(board) and 0 <= col < len(board[0]) and board[row][col] == "U":
+            board[row][col] = "O"
+            self.dfs(row - 1, col, board)
+            self.dfs(row + 1, col, board)
+            self.dfs(row, col - 1, board)
+            self.dfs(row, col + 1, board)
+
+
+board = [["X", "X", "X", "X"],
+         ["X", "O", "O", "X"],
+         ["X", "X", "O", "X"],
+         ["X", "O", "X", "X"]]
+
+# SurroundedRegions().solve(board)
+# print(board)

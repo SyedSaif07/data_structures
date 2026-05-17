@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class Node:
     """
     A linked list is a data structure which has connected elements where each element
@@ -558,3 +561,73 @@ class MiddleOfTheLinkedList:
             slow = slow.next
             fast = fast.next.next
         return slow
+
+
+class RemoveNthNode:
+    """
+    We will use fast and slow pointer approach here where the fast pointer moves n+1 times.
+
+    Then move both the fast and slow pointer one node at a time until fast is null.
+
+    When the fast pointer moves to end, slow pointer will be at n - 1 node since we maintained
+    n + 1 distance between them.
+
+    Finally, s.next = s.next.next
+    """
+
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        slow = head
+        fast = head
+
+        for i in range(n):
+            fast = fast.next
+
+        if fast is None:  # only one node
+            return head.next
+
+        while fast.next is not None:
+            slow = slow.next
+            fast = fast.next
+
+        slow.next = slow.next.next
+        return head
+
+
+class RemoveDuplicatesFromSortedList:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        res = head
+
+        while head and head.next:
+            if head.val == head.next.val:
+                head.next = head.next.next
+            else:
+                head = head.next
+
+        return res
+
+
+node = ListNode(1)
+node.next = ListNode(2)
+node.next.next = ListNode(3)
+node.next.next.next = ListNode(4)
+
+
+# node = RemoveDuplicatesFromSortedList().deleteDuplicates(node)
+
+
+class SwapNodesInPairs:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        curr = head
+
+        while curr and curr.next:
+            temp = curr
+            curr = curr.next
+            curr.next = temp
+        return head
+
+
+node = SwapNodesInPairs().swapPairs(node)
+
+while node is not None:
+    print(node.val)
+    node = node.next
