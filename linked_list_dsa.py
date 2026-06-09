@@ -617,17 +617,23 @@ node.next.next.next = ListNode(4)
 
 class SwapNodesInPairs:
     def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        curr = head
+        dummy = ListNode(0, head)
+        prev, curr = dummy, head
 
         while curr and curr.next:
-            temp = curr
-            curr = curr.next
-            curr.next = temp
-        return head
+            tp = curr.next.next
+            sp = curr.next
+            sp.next = curr
+            curr.next = tp
+            prev.next = sp
+
+            prev = curr
+            curr = tp
+        return dummy.next
 
 
-node = SwapNodesInPairs().swapPairs(node)
-
-while node is not None:
-    print(node.val)
-    node = node.next
+# node = SwapNodesInPairs().swapPairs(node)
+#
+# while node is not None:
+#     print(node.val)
+#     node = node.next

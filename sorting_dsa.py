@@ -290,7 +290,7 @@ def partition_algorithm():
     print(a)
 
 
-# partition_algorithm()
+partition_algorithm()
 
 
 # a = [10, 50, 40, 20, 15, 16, 2, 3, 8, 9, 99, 34, 43, 100, 121, 104, 132]

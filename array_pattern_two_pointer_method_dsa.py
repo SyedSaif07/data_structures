@@ -77,10 +77,10 @@ class RemoveDuplicatesFromSortedArray:
         return res
 
 
-# nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
-# k = RemoveDuplicatesFromSortedArray().removeDuplicates(nums)
-# print(nums)
-# print(nums[:k])
+nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
+k = RemoveDuplicatesFromSortedArray().removeDuplicates(nums)
+print(nums)
+print(nums[:k])
 
 
 class ContainerWithMostWater:

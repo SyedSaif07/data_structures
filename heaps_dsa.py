@@ -147,7 +147,7 @@ class TopKFrequentElements:
         return [i[1] for i in heap]
 
 
-nums = [1, 1, 1, 2, 2, 3]
-k = 2
+# nums = [1, 1, 1, 2, 2, 3]
+# k = 2
 
 # print(TopKFrequentElements().topKFrequent(nums, k))
