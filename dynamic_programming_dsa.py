@@ -339,7 +339,7 @@ class HouseRobber:
             return self.dp[(i, canRob)]
 
 
-# nums = [1,2,3,1]
+# nums = [1, 2, 3, 1]
 # print(HouseRobber().rob(nums))
 
 
@@ -359,3 +359,40 @@ class LongestIncreasingSubsequence:
 
 
 # print(LongestIncreasingSubsequence().lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
+
+
+class WordBreak:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        dp = [True] + [False] * len(s)
+        for i in range(1, len(s) + 1):
+            for w in wordDict:
+                start = i - len(w)
+                if start >= 0 and dp[start] and s[start: i] == w:
+                    dp[i] = True
+                    break
+        return dp[-1]
+
+
+# print(WordBreak().wordBreak(s="leetcode", wordDict=["leet", "code"]))
+
+
+class DecodeWays:
+    def numDecodings(self, s: str) -> int:
+        if s[0] == "0" or not s:
+            return 0
+        n = len(s)
+        dp = [0] * (n + 1)
+        dp[0] = 1
+        dp[1] = 1
+
+        for i in range(2, n + 1):
+            oneDigit = int(s[i - 1:i])
+            twoDigit = int(s[i - 2:i])
+            if 1 <= oneDigit <= 9:
+                dp[i] += dp[i - 1]
+            if 10 <= twoDigit <= 26:
+                dp[i] += dp[i - 2]
+        return dp[n]
+
+
+print(DecodeWays().numDecodings(s="226"))

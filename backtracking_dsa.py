@@ -105,13 +105,15 @@ class Permutations:
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
 
-        def dfs(i, pms):
-            if i == len(nums):
-                res.append(pms)
-                return
-
-            dfs(i+1, pms + [nums[i]])
-        dfs(0, [])
+        if len(nums) == 1:
+            return [nums[:]]
+        for i in range(len(nums)):
+            n = nums.pop(0)
+            perms = self.permute(nums)
+            for perm in perms:
+                perm.append(n)
+            res.extend(perms)
+            nums.append(n)
         return res
 
 
