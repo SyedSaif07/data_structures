@@ -395,4 +395,4 @@ class DecodeWays:
         return dp[n]
 
 
-print(DecodeWays().numDecodings(s="226"))
+# print(DecodeWays().numDecodings(s="226"))
