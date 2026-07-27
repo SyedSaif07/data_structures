@@ -118,3 +118,26 @@ class Permutations:
 
 
 # print(Permutations().permute([1, 2, 3]))
+
+
+class Combinations:
+    def __init__(self):
+        self.subsets = []
+
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        result = []
+
+        def backtrack(m):
+            if len(self.subsets) == k:
+                result.append([a for a in self.subsets])
+            else:
+                for i in range(m, n+1):
+                    self.subsets.append(i)
+                    backtrack(i+1)
+                    self.subsets.remove(i)
+
+        backtrack(1)
+        return result
+
+
+print(Combinations().combine(4, 3))
