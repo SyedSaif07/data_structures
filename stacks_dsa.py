@@ -246,4 +246,22 @@ class DecodeString:
         return "".join(stack)
 
 
-print(DecodeString().decodeString(s="3[a2[c]]"))
+# print(DecodeString().decodeString(s="3[a2[c]]"))
+
+class SimplifyPath:
+    def simplifyPath(self, path: str) -> str:
+        stack = []
+        curr = ""
+
+        for char in path + "/":
+            if char == "/":
+                if curr == "..":
+                    if stack: stack.pop()
+                elif curr != "" and curr != ".":
+                    stack.append(curr)
+                curr = ""
+            else:
+                curr += char
+        return "/" + "/".join(stack)
+
+print(SimplifyPath().simplifyPath("/home/user/Documents/../Pictures"))
