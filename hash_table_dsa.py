@@ -186,3 +186,21 @@ class ValidAnagram:
                 return False
             counter[j] -= 1
         return True
+
+
+class ContainsDuplicateII:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        hash_map = {}
+
+        for i, j in enumerate(nums):
+            if j not in hash_map:
+                hash_map[j] = i
+            else:
+                if abs(hash_map[j] - i) <= k:
+                    return True
+                else:
+                    hash_map[j] = i
+        return False
+
+
+print(ContainsDuplicateII().containsNearbyDuplicate([1, 2, 3, 1], 3))
